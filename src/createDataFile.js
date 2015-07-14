@@ -8,11 +8,26 @@ var parseTripSummaries = require('./parseTripSummaries');
 
 var args = getargs({
   '--summaries': 1,
-  '--outfile': 1,
+  '--notesDir': 1,
 });
 
-var tripSummaries = parseTripSummaries(fs.readFileSync(args['--summaries'], {encoding: 'utf8'}));
+var tripSummaries = parseTripSummaries(fs.readFileSync(args['--summaries'], {encoding: 'utf8'}))
+  .map(function(trip) {
+    return {
+      name: trip.name,
+      date: trip.date,
+      surveyors: trip.surveyors,
+    };
+  });
 
-var data = "'use strict';window.tripSummaries=" + JSON.stringify(tripSummaries) + ';';
+var notesRx = /FRCS_(\d+).*.pdf/;
 
-fs.writeFileSync(args['--outfile'], data, {encoding: 'utf8'});
+var notesFiles = fs.readdirSync(args['--notesDir']);
+notesFiles.forEach(function(filename) {
+  var result = notesRx.exec(filename);
+  if (result) {
+    tripSummaries[Number(result[1])].notesfile = filename;
+  }
+});
+
+console.log("'use strict';window.tripSummaries=" + JSON.stringify(tripSummaries) + ';');

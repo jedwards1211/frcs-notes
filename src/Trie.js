@@ -1,17 +1,13 @@
-var Trie = module.exports = function() {
-};
-
-Trie.prototype.insert = function(word, dataFn) {
-  var node = this;
+module.exports.insert = function(trie, word, dataFn) {
+  var node = trie;
   for (var i = 0; i < word.length; i++) {
     var letter = word.charAt(i);
-    var children = node.children;
-    if (!children) children = node.children = {};
-    node = children[letter];
-    if (!node) node = children[letter] = new Trie();
+    var child = node[letter];
+    if (!child) child = node[letter] = {};
+    node = child;
   }
   node.word = word;
-  node.data = dataFn(node.data);
+  if (dataFn) node.data = dataFn(node.data);
 };
 
 function searchRecursive(node, letter, word, previousRow, results, maxCost) {
@@ -33,18 +29,15 @@ function searchRecursive(node, letter, word, previousRow, results, maxCost) {
   }
 
   if (Math.min.apply(undefined, currentRow) <= maxCost) {
-    var children = node.children;
-    for (var letter in children) {
-      if (children.hasOwnProperty(letter)) {
-        searchRecursive(children[letter], letter, word, currentRow, results, maxCost);
+    for (var letter in node) {
+      if (node.hasOwnProperty(letter) && letter.length === 1) {
+        searchRecursive(node[letter], letter, word, currentRow, results, maxCost);
       }
     }
   }
 }
 
-Trie.prototype.search = function(word, maxCost) {
-  if (!this.children) return [];
-
+module.exports.search = function(trie, word, maxCost) {
   var currentRow = [];
   for (var i = 0; i <= word.length; i++) {
     currentRow[i] = i;
@@ -52,10 +45,9 @@ Trie.prototype.search = function(word, maxCost) {
 
   var results = {};
 
-  var children = this.children;
-  for (var letter in children) {
-    if (children.hasOwnProperty(letter)) {
-      searchRecursive(children[letter], letter, word, currentRow, results, maxCost);
+  for (var letter in trie) {
+    if (trie.hasOwnProperty(letter) && letter.length === 1) {
+      searchRecursive(trie[letter], letter, word, currentRow, results, maxCost);
     }
   }
 

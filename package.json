@@ -1,0 +1,50 @@
+{
+  "name": "frcs-notes",
+  "version": "1.0.0",
+  "description": "FRCS Survey Note viewer",
+  "scripts": {
+    "start": "node server.js",
+    "lint": "eslint src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jedwards1211/frcs-notes.git"
+  },
+  "keywords": [
+    "react",
+    "reactjs",
+    "webpack",
+    "caving",
+    "survey"
+  ],
+  "author": "James Edwards <jedwards@fastmail.com> (http://github.com/jedwards1211)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jedwards1211/frcs-notes/issues"
+  },
+  "homepage": "https://github.com/jedwards1211/frcs-notes",
+  "devDependencies": {
+    "babel-core": "^5.4.7",
+    "babel-eslint": "^3.1.9",
+    "babel-loader": "^5.1.2",
+    "css-loader": "^0.15.3",
+    "eslint-plugin-react": "^2.3.0",
+    "less": "^2.5.1",
+    "less-loader": "^2.2.0",
+    "node-sass": "^3.2.0",
+    "react-hot-loader": "^1.2.7",
+    "sass-loader": "^1.0.2",
+    "style-loader": "^0.12.3",
+    "webpack": "^1.9.6",
+    "webpack-dev-server": "^1.8.2"
+  },
+  "dependencies": {
+    "babel": "^5.6.14",
+    "babel-core": "^5.6.20",
+    "bootstrap": "^3.3.5",
+    "bootstrap-webpack": "0.0.3",
+    "lodash": "^3.10.0",
+    "react": "^0.13.3",
+    "react-router": "^0.13.3"
+  }
+}
