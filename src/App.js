@@ -1,8 +1,14 @@
 'use strict';
 
 import React from 'react';
+import Router from 'react-router';
+
+import Collapse from './Collapse';
+
+require('./App.sass');
 
 export default React.createClass({
+  mixins: [Router.Navigation, Router.State],
   contextTypes: {
     tripStore: React.PropTypes.object.isRequired,
   },
@@ -14,46 +20,65 @@ export default React.createClass({
   },
   onInputKeyDown(e) {
     if (e.key === 'Enter') {
+      var query = this.getQuery();
+      query.q = React.findDOMNode(this.refs.search).value;
+      this.transitionTo(this.getPathname(), this.getParams(), query);
+    }
+  },
+  componentDidMount() {
+    if (this.props.query.q) {
+      this.componentWillReceiveProps(this.props);
+    }
+  },
+  componentWillReceiveProps(nextProps) {
+    if (this.currentQuery !== nextProps.query.q) {
+      this.currentQuery = nextProps.query.q;
       this.setState({
         searching: true,
       }, () => {
         this.setState({
           searching: false,
-          trips: this.context.tripStore.find(React.findDOMNode(this.refs.search).value),
+          trips: this.context.tripStore.find(nextProps.query.q),
         });
-      });
+      });      
     }
+  },
+  onPanelHeaderClick(key, e) {
+    if (this.openPanel && this.openPanel.isMounted()) {
+      this.openPanel.hide();
+    }
+    this.openPanel = this.refs[key];
+    this.openPanel.show();
   },
   render() {
     var {searching, trips} = this.state;
 
-    var rows = [];
+    var panels = [];
     trips.forEach(trip => {
       if (trip) {
-        var tripNum = trip.tripNum;
-        rows.push(<tr key={tripNum}>
-          <td className="trip-num"><a href={trip.notesfile}>{tripNum}</a></td>
-          <td className="trip-name"><a href={trip.notesfile}>{trip.name}</a></td>
-          <td className="trip-date"><a href={trip.notesfile}>{trip.date && trip.date.toString().substring(0, 10)}</a></td>
-        </tr>);
+        var tripNum = String(trip.tripNum);
+        panels.push(<div key={tripNum} className="panel panel-default">
+          <div className="panel-heading" onClick={this.onPanelHeaderClick.bind(this, tripNum)}>
+            <div className="trip-num"><a href={trip.notesfile}>{tripNum}</a></div>
+            <div className="trip-name"><a href={window.config.notesPath + trip.notesfile}>{trip.name}</a></div>
+          </div>
+          <Collapse initOpen={false} component="div" ref={tripNum} className="panel-body">
+            <p><strong>Surveyors: </strong>{trip.surveyors && trip.surveyors.join(', ')}</p>
+            <p><strong>Date: </strong>{trip.date && trip.date.toString().substring(0, 10)}</p>
+          </Collapse>
+        </div>);
       }
     });
 
-    return <div>
-      <input ref="search" className="form-control" onKeyDown={this.onInputKeyDown} />
+    return <div className="app">
+      <input ref="search" className="form-control" placeholder="Search for trips!" 
+        defaultValue={this.props.query.q} onKeyDown={this.onInputKeyDown} />
       {searching ?
         <div className="alert alert-info">Searching...</div>
         :
-        <table className="table table-hover">
-          <tbody>
-            <tr>
-              <th>#</th>
-              <th>Description</th>
-              <th>Date</th>
-            </tr>
-            {rows}
-          </tbody>
-        </table>}
+        <div className="search-results">
+          {panels}
+        </div>}
     </div>;
   }
 });

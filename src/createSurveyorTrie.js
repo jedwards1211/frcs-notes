@@ -11,7 +11,7 @@ module.exports = function(tripSummaries) {
       if (trip && trip.surveyors) {
         trip.surveyors.forEach(function(fullName, surveyorIndex) {
           fullName.split(/\s+/).forEach(function(name, nameIndex) {
-            Trie.insert(result, name, function(data) {
+            Trie.insert(result, name.toLowerCase(), function(data) {
               var result = data || [];
               result.push({tripNum: tripNum, surveyorIndex: surveyorIndex, nameIndex: nameIndex});
               return result;

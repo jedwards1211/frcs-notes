@@ -1,0 +1,59 @@
+.app
+  position: absolute
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+
+  input
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    height: 40px
+    border-radius: 0
+    border-left: none
+    border-right: none
+    border-top: none
+    z-index: 100
+
+  .search-results
+    position: absolute
+    top: 40px
+    left: 0
+    right: 0
+    bottom: 0
+    overflow-y: scroll
+
+  .panel
+    margin: 0
+    border: none
+    box-shadow: none
+
+    > .panel-body
+      border-bottom: 1px solid #ddd
+      padding-left: 55px
+
+    > .panel-heading
+      display: flex
+      flex-direction: row
+      cursor: pointer
+      transition: background-color linear 0.1s
+
+      a
+        color: black
+
+      &:hover
+        background-color: #eee
+
+      > .trip-num
+        flex-grow: 0
+        flex-shrink: 0
+        text-align: right
+        font-weight: bold
+        padding-right: 10px
+        width: 40px
+
+      > .trip-name
+        flex-grow: 1
+        flex-shrink: 1

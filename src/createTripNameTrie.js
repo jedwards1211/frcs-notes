@@ -10,7 +10,7 @@ module.exports = function(tripSummaries) {
       var trip = tripSummaries[tripNum];
       if (trip && trip.name) {
         trip.name.split(/\s+/).forEach(function(word, index) {
-          Trie.insert(result, word, function(data) {
+          Trie.insert(result, word.toLowerCase(), function(data) {
             var result = data || [];
             result.push({tripNum: tripNum, index: index});
             return result;

@@ -14,7 +14,7 @@ export default class TripStore {
   find(query) {
     if (!query) return this.tripSummaries; 
 
-    var words = query.split(/\s+/);
+    var words = query.toLowerCase().split(/\s+/);
 
     if (!words.length) return this.tripSummaries;
 

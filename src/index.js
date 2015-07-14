@@ -1,6 +1,8 @@
 'use strict';
 
 import React from 'react';
+import Router from 'react-router';
+import {Route, DefaultRoute, RouteHandler} from 'react-router';
 import App from './App';
 
 import TripStore from './TripStore';
@@ -23,8 +25,16 @@ var AppWrapper = React.createClass({
     };
   },
   render() {
-    return <App />;
+    return <RouteHandler {...this.props} />;
   }
 });
 
-React.render(<AppWrapper />, document.getElementById('root'));
+var Routes = (
+  <Route name="/" handler={AppWrapper}>
+    <DefaultRoute handler={App} />
+  </Route>
+);
+
+Router.run(Routes, function (Handler) {
+  React.render(<Handler/>, document.getElementById('root'));
+});

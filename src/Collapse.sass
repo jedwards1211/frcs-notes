@@ -1,0 +1,12 @@
+@import ../css3-mixins
+
+.rcollapse
+  display: none
+
+  &.in
+    display: block
+
+.rcollapsing
+  @include transition(height ease 0.2s, visibility ease 0.2s)
+  position: relative
+  overflow: hidden
