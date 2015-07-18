@@ -20,7 +20,7 @@ var tripSummaries = parseTripSummaries(fs.readFileSync(args['--summaries'], {enc
     };
   });
 
-var notesRx = /FRCS_(\d+).*.pdf/;
+var notesRx = /frcs_(\d+).*.pdf/i;
 
 var notesFiles = fs.readdirSync(args['--notesDir']);
 notesFiles.forEach(function(filename) {
