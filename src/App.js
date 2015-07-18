@@ -2,8 +2,8 @@
 
 import React from 'react';
 import Router from 'react-router';
-
 import Collapse from './Collapse';
+import classNames from 'classnames';
 
 require('./App.sass');
 
@@ -57,10 +57,14 @@ export default React.createClass({
     trips.forEach(trip => {
       if (trip) {
         var tripNum = String(trip.tripNum);
-        panels.push(<div key={tripNum} className="panel panel-default">
+        panels.push(<div key={tripNum} className={classNames('panel', 'panel-default', {'notes-unavailable': !trip.notesfile})}>
           <div className="panel-heading" onClick={this.onPanelHeaderClick.bind(this, tripNum)}>
-            <div className="trip-num"><a href={trip.notesfile}>{tripNum}</a></div>
-            <div className="trip-name"><a href={window.config.notesPath + trip.notesfile}>{trip.name}</a></div>
+            <div className="trip-num">{trip.notesfile ? <a href={trip.notesfile}>{tripNum}</a> : tripNum}</div>
+            <div className="trip-name">{trip.notesfile ? 
+              <a href={window.config.notesPath + trip.notesfile}>{trip.name}</a>
+              : 
+              <span><strong>Notes unavailable</strong> {trip.name}</span>}
+            </div>
           </div>
           <Collapse initOpen={false} component="div" ref={tripNum} className="panel-body">
             <p><strong>Surveyors: </strong>{trip.surveyors && trip.surveyors.join(', ')}</p>
