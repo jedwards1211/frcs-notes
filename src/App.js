@@ -83,7 +83,12 @@ export default React.createClass({
         var tripNum = String(trip.tripNum);
         panels.push(<div key={tripNum} className={classNames('panel', 'panel-default', {'notes-unavailable': !trip.notesfile})}>
           <div className="panel-heading" onClick={this.onPanelHeaderClick.bind(this, tripNum)}>
-            <div className="trip-num">{trip.notesfile ? <a href={trip.notesfile}>{tripNum}</a> : tripNum}</div>
+            <div className="trip-num">
+              {trip.notesfile ? 
+                <a href={window.config.notesPath + trip.notesfile}>{tripNum}</a> 
+                : 
+                tripNum}
+            </div>
             <div className="trip-name">{trip.notesfile ? 
               <a href={window.config.notesPath + trip.notesfile}>{trip.name}</a>
               : 
