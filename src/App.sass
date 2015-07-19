@@ -5,7 +5,11 @@
   right: 0
   bottom: 0
 
-  input
+  > .search
+    position: relative
+    z-index: 100
+
+  > .search > input
     position: absolute
     top: 0
     left: 0
@@ -17,7 +21,17 @@
     border-top: none
     z-index: 100
 
-  .search-results
+  > .search > .spinner
+    position: absolute
+    top: 9px
+    right: 9px
+    z-index: 500
+
+  > .alert
+    position: relative
+    top: 40px
+
+  > .search-results
     position: absolute
     top: 40px
     left: 0

@@ -4,8 +4,26 @@ import React from 'react';
 import Router from 'react-router';
 import Collapse from './Collapse';
 import classNames from 'classnames';
+import Spinner from './Spinner';
 
 require('./App.sass');
+
+var SearchField = React.createClass({
+  propTypes: {
+    onChange: React.PropTypes.func,
+  },
+  getInitialState() {
+    return {};
+  },
+  render() {
+    return <div className="search">
+      <input ref="search" className="form-control" placeholder="Search for trips!" 
+        onChange={this.props.onChange}>
+      </input>
+      {this.state.searching && <Spinner/>}
+    </div>;
+  },
+});
 
 export default React.createClass({
   mixins: [Router.Navigation, Router.State],
@@ -14,33 +32,35 @@ export default React.createClass({
   },
   getInitialState() {
     return {
-      searching: false,
       trips: this.context.tripStore.find(),
     };
   },
-  onInputKeyDown(e) {
-    if (e.key === 'Enter') {
-      var query = this.getQuery();
-      query.q = React.findDOMNode(this.refs.search).value;
-      this.transitionTo(this.getPathname(), this.getParams(), query);
+  onSearchChange(e) {
+    var query = e.target.value;
+    var queryCount = this.queryCount = (this.queryCount || 0) + 1;
+
+    clearTimeout(this.timeout);
+
+    var doSearch = () => {
+      this.refs.searchField.setState({searching: true}, () => {
+        this.timeout = setTimeout(() => {
+          if (this.queryCount === queryCount) {
+            var trips = this.context.tripStore.find(query);
+            if (this.queryCount === queryCount) {
+              this.refs.searchField.setState({searching: false}, () => {
+                this.setState({trips: trips});
+              })
+            }
+          }
+        }, 100);
+      });
+    };
+
+    if (query) {
+      doSearch();
     }
-  },
-  componentDidMount() {
-    if (this.props.query.q) {
-      this.componentWillReceiveProps(this.props);
-    }
-  },
-  componentWillReceiveProps(nextProps) {
-    if (this.currentQuery !== nextProps.query.q) {
-      this.currentQuery = nextProps.query.q;
-      this.setState({
-        searching: true,
-      }, () => {
-        this.setState({
-          searching: false,
-          trips: this.context.tripStore.find(nextProps.query.q),
-        });
-      });      
+    else {
+      this.timeout = setTimeout(doSearch, 1000);
     }
   },
   onPanelHeaderClick(key, e) {
@@ -50,8 +70,12 @@ export default React.createClass({
     this.openPanel = this.refs[key];
     this.openPanel.show();
   },
+  componentWillMount() {
+  },
+  componentWillUnmount() {
+  },
   render() {
-    var {searching, trips} = this.state;
+    var trips = this.state.trips;
 
     var panels = [];
     trips.forEach(trip => {
@@ -75,14 +99,10 @@ export default React.createClass({
     });
 
     return <div className="app">
-      <input ref="search" className="form-control" placeholder="Search for trips!" 
-        defaultValue={this.props.query.q} onKeyDown={this.onInputKeyDown} />
-      {searching ?
-        <div className="alert alert-info">Searching...</div>
-        :
-        <div className="search-results">
-          {panels}
-        </div>}
+      <SearchField ref="searchField" onChange={this.onSearchChange} />
+      <div className="search-results">
+        {panels}
+      </div>
     </div>;
   }
 });
