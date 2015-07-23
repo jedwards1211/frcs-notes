@@ -96,18 +96,20 @@ export default React.createClass({
             </div>
           </div>
           <Collapse initOpen={false} component="div" ref={tripNum} className="panel-body">
-            <p><strong>Surveyors: </strong>{trip.surveyors && trip.surveyors.join(', ')}</p>
-            <p><strong>Date: </strong>{trip.date && trip.date.toString().substring(0, 10)}</p>
+            <div>
+              <p><strong>Surveyors: </strong>{trip.surveyors && trip.surveyors.join(', ')}</p>
+              <p><strong>Date: </strong>{trip.date && trip.date.toString().substring(0, 10)}</p>
+            </div>
           </Collapse>
         </div>);
       }
     });
 
     return <div className="app">
-      <SearchField ref="searchField" onChange={this.onSearchChange} />
       <div className="search-results">
         {panels}
       </div>
+      <SearchField ref="searchField" onChange={this.onSearchChange} />
     </div>;
   }
 });

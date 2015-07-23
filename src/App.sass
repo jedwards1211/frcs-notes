@@ -40,17 +40,19 @@
     overflow-y: scroll
 
   .panel
-    margin: 0
-    border: none
+    margin: -1px
     box-shadow: none
 
     > .panel-body
       border-bottom: 1px solid #ddd
-      padding-left: 55px
+      padding: 0
+
+      > *
+        padding: 15px
+        padding-left: 55px
 
     > .panel-heading
-      display: flex
-      flex-direction: row
+      margin-top: -1px
       cursor: pointer
       transition: background-color linear 0.1s
 
@@ -61,16 +63,11 @@
         background-color: #eee
 
       > .trip-num
-        flex-grow: 0
-        flex-shrink: 0
+        float: left
         text-align: right
         font-weight: bold
         padding-right: 10px
         width: 40px
-
-      > .trip-name
-        flex-grow: 1
-        flex-shrink: 1
 
   .panel.notes-unavailable
     > .panel-heading
