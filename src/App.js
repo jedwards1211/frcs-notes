@@ -26,7 +26,7 @@ var SearchField = React.createClass({
 });
 
 export default React.createClass({
-  mixins: [Router.Navigation, Router.State],
+  mixins: [Router.Navigation],
   contextTypes: {
     tripStore: React.PropTypes.object.isRequired,
   },
@@ -75,7 +75,9 @@ export default React.createClass({
   componentWillUnmount() {
   },
   render() {
-    var trips = this.state.trips;
+    var {query} = this.props;
+    var {viewNotes} = query;
+    var {trips} = this.state;
 
     var panels = [];
     trips.forEach(trip => {
@@ -85,12 +87,12 @@ export default React.createClass({
           <div className="panel-heading" onClick={this.onPanelHeaderClick.bind(this, tripNum)}>
             <div className="trip-num">
               {trip.notesfile ? 
-                <a href={window.config.notesPath + trip.notesfile}>{tripNum}</a> 
+                <a href={window.config.notesPath + trip.notesfile} target="frcs-notes-viewer">{tripNum}</a> 
                 : 
                 tripNum}
             </div>
             <div className="trip-name">{trip.notesfile ? 
-              <a href={window.config.notesPath + trip.notesfile}>{trip.name}</a>
+              <a href={window.config.notesPath + trip.notesfile} target="frcs-notes-viewer">{trip.name}</a>
               : 
               <span><strong>Notes unavailable</strong> {trip.name}</span>}
             </div>

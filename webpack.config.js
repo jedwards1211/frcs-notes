@@ -8,9 +8,9 @@ module.exports = {
     './src/index'
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, 'assets'),
     filename: 'bundle.js',
-    publicPath: '/static/'
+    publicPath: '/assets/'
   },
   resolve: {
     extensions: ['', '.js', '.jsx']
