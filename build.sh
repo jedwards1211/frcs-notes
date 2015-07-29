@@ -37,7 +37,7 @@ for file in data.js assets/bundle.js
 do
   set -- $(md5sum $file)
   md5=$1
-  ext=${base##*.}
+  ext=${file##*.}
   base=${file%.*}
   perl -pi -e "s|${file}|https://frcs.xyz/notes/${base}-${md5}.${ext}|g" build/frcs-notes-local/index.html
 done
