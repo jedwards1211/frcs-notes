@@ -1,0 +1,13 @@
+FRCS Notes Offline viewer
+
+To use:
+
+1. Edit the following line in config.js:
+
+   notesPath: '/svn/SurveyScans/',
+
+   For example if your notes are in C:/FRCS/SurveyScans, change it to:
+
+   notesPath: 'C:/FRCS/SurveyScans/,
+
+2. Open frcs-notes-local.html in a web browser.
