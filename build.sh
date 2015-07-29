@@ -13,9 +13,11 @@ for file in data.js config.js assets/bundle.js
 do
   set -- $(md5sum $file)
   md5=$1
-  cp $file build/web
-  echo https://frcs.xyz/notes/${file}?${md5} >> build/web/frcs-notes.appcache
-  perl -pi -e "s|${file}|${file}\?${md5}|g" build/web/index.html
+  ext=${file##*.}
+  base=${file%.*}
+  cp $file build/web/${base}-${md5}.${ext}
+  echo https://frcs.xyz/notes/${base}-${md5}.${ext} >> build/web/frcs-notes.appcache
+  perl -pi -e "s|${file}|${base}-${md5}.${ext}|g" build/web/index.html
 done
 
 for file in assets/*
@@ -35,5 +37,7 @@ for file in data.js assets/bundle.js
 do
   set -- $(md5sum $file)
   md5=$1
-  perl -pi -e "s|${file}|https://frcs.xyz/notes/${file}\?${md5}|g" build/frcs-notes-local/index.html
+  ext=${base##*.}
+  base=${file%.*}
+  perl -pi -e "s|${file}|https://frcs.xyz/notes/${base}-${md5}.${ext}|g" build/frcs-notes-local/index.html
 done
