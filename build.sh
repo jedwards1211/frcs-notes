@@ -1,13 +1,12 @@
 #!/bin/sh
 
 rm -rvf build
-mkdir -p build/web
+mkdir -p build/web/assets
 
-cp -urvp assets build/web
+cp -urvp index.html build/web
 
 echo CACHE MANIFEST >> build/web/frcs-notes.appcache
 echo index.html >> build/web/frcs-notes.appcache
-cp index.html build/web
 
 for file in data.js config.js assets/bundle.js
 do
@@ -16,12 +15,16 @@ do
   ext=${file##*.}
   base=${file%.*}
   newname=${base}-${md5}.${ext}
-  cp $file build/web/$newname
+  cp -v $file build/web/$newname
   echo $newname >> build/web/frcs-notes.appcache
   perl -pi -e "s|${file}|${newname}|g" build/web/index.html
 done
 
 for file in assets/*
 do
-  [ "${file##*.}" != "js" ] && echo ${file} >> build/web/frcs-notes.appcache
+  if [ $file != "assets/bundle.js" ]
+  then 
+    cp -v $file build/web/assets
+    echo ${file} >> build/web/frcs-notes.appcache
+  fi
 done
